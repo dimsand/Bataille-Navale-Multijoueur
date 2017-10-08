@@ -1,0 +1,14 @@
+{
+  "name": "testjeumulti",
+  "version": "1.0.0",
+  "description": "Un test d'un jeu multijoueur en ligne",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Dimitri Sandron",
+  "license": "ISC",
+  "dependencies": {
+    "socketio": "^1.0.0"
+  }
+}
