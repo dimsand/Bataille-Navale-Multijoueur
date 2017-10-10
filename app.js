@@ -1,50 +1,89 @@
-var http = require('http');
+var express = require('express');
+var bodyParser = require('body-parser');
+var app = express();
+var http = require('http').Server(app);
+var io = require('socket.io')(http);
+
 var fs = require('fs');
+var creds = '';
 
-let users = [];
+var redis = require('redis');
+var client = '';
+var port = process.env.PORT || 8080;
 
-function removeUserFromUserList(pseudoToRemove){
-    var indexUser = users.indexOf(pseudoToRemove);
-    if (indexUser > -1) {
-        users.splice(indexUser, 1);
-    }
-}
+// Express Middleware for serving static
+// files and parsing the request body
+app.use(express.static('public'));
+app.use(bodyParser.urlencoded({
+    extended: true
+}));
 
-// Chargement du fichier index.html affiché au client
-var server = http.createServer(function(req, res) {
-    fs.readFile('./index.html', 'utf-8', function(error, content) {
-        res.writeHead(200, {"Content-Type": "text/html"});
-        res.end(content);
+// Start the Server
+http.listen(port, function() {
+    console.log('Server Started. Listening on *:' + port);
+});
+
+// Store people in chatroom
+var players = [];
+
+// Render Main HTML file
+app.get('/', function (req, res) {
+    res.sendFile('views/index.html', {
+        root: __dirname
     });
 });
 
-// Chargement de socket.io
-var io = require('socket.io').listen(server);
+// Connexion à partir du boutton Join
+app.post('/join', function(req, res) {
+    var username = req.body.username;
+    if (players.indexOf(username) === -1) {
+        players.push(username);
+        res.send({
+            'players': players,
+            'status': 'OK'
+        });
+    } else {
+        res.send({
+            'status': 'FAILED'
+        });
+    }
+});
 
-io.sockets.on('connection', function (socket, pseudo) {
+// Déconnexion à partir du bouton Leave
+app.post('/leave', function(req, res) {
+    var username = req.body.username;
+    players.splice(players.indexOf(username), 1);
+    res.send({
+        'status': 'OK'
+    });
+});
 
-    // Dès qu'on nous donne un pseudo, on le stocke en variable de session et on ajoute dans la liste
-    socket.on('petit_nouveau', function(pseudo) {        
-        if(pseudo != null && pseudo != undefined){
-            socket.pseudo = pseudo;
-            users.push({pseudo: pseudo});
-            console.log(users);
-            socket.broadcast.emit('addUserList', pseudo);
+
+//////////////////////////////////////////////////////////////
+// EVENEMENTS SOCKETS PROVENANT DU CLIENT
+io.on('connection', function(socket) {
+    
+    // New User
+    socket.on('newUser', function(username) {
+        socket.username = username;
+        socket.broadcast.emit('notifyNewUser', username, players);
+        socket.broadcast.emit('majListAdversaires', players);
+    });
+
+    // User disconnect with leave button
+    socket.on('disconnectUser', function(username){
+        console.log('user '+socket.username+' disconnected');
+        players.splice(players.indexOf(username), 1);
+        socket.broadcast.emit('notifyDeconnectUser', username);
+    });
+
+    // User disconnect with close windows
+    socket.on('disconnect', function(){
+        if(socket.username != null && socket.username != undefined){
+            console.log('user '+socket.username+' disconnected');
+            players.splice(players.indexOf(socket.username), 1);
+            socket.broadcast.emit('notifyDeconnectUser', socket.username);
         }
     });
 
-    // On met à jour la liste des users déjà connecté pour le nouveau user
-    socket.emit('majUserList', users);
-
-    // On signale aux autres clients qu'il y a un nouveau venu
-    socket.broadcast.emit('notifNewUserToAll', 'Un autre client vient de se connecter ! ', users);
-
-    socket.on('disconnect', function(){
-        console.log('user disconnected');
-        removeUserFromUserList(socket.pseudo);
-        socket.broadcast.emit('removeUserList', socket.pseudo);
-    });
 });
-
-
-server.listen(8080);

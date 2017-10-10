@@ -1,0 +1,88 @@
+textarea{
+    width: 100%;
+    height: 100px;
+}
+
+#game{
+    margin: 20px;
+    background-color: #f5f5f5;
+    text-align: center;
+}
+
+#game_screen{
+    display: none;
+}
+
+h1{
+  font-size: 45px;
+}
+#tableau-J0, #tableau-J1{
+    width: 48%;
+    margin: 10px 1%;
+    float: left;
+}
+.ligne{
+    display: flex;
+    justify-content: center;
+}
+.ligne.desactived{
+    opacity: 0.5;
+}
+.ligne.desactived .case, .ligne.coordonnees .case, .case.coordonnees{
+    cursor: auto;
+}
+.ligne.coordonnees .case, .case.coordonnees{
+  background-color: #bdc3c7;
+}
+.infos_user{
+  margin-top: 10px;
+}
+.case{
+    height: 30px;
+    width: 30px;
+    background-color: #efefef;
+    border: solid #adadad 1px;
+    margin-right: 1px;
+    margin-bottom: 1px;
+    cursor: pointer;
+    font-size: 1.6em;
+    text-align: center;
+}
+.case.touche, .case.touche:hover{
+    color: red;
+    font-weight: bold;
+}
+.case.coule, .case.coule:hover{
+    border: solid 1px green;
+}
+#tableau-J1 .ligne .case.clique, #tableau-J1 .ligne .case.coule{
+    color: #c0392b;
+}
+.case:hover:not(.case.coordonnees){
+    background-color: #dedede;
+}
+.ligne.desactived .case:hover{
+    background-color: #efefef;
+}
+.case.brown{
+    background-color: #d35400;
+}
+.case.pink{
+    background-color: #9b59b6;
+}
+.case.yellow{
+    background-color: #f39c12;
+}
+.case.black{
+    background-color: #34495e;
+}
+.case.cyan{
+    background-color: #3498db;
+}
+
+.img-explose{
+  position: relative;
+  top: -32px;
+  left: -34px;
+  height: 90px;
+}
