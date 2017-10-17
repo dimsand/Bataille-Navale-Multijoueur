@@ -33,18 +33,34 @@ app.get('/', function (req, res) {
     });
 });
 
+// Get le dernier id user
+app.get('/getLastUserId', function (req, res) {
+    if(players.length > 0){
+        res.send({
+            'status': 'OK',
+            'lastUserId': players[(players.length)-1].id
+        });
+    }else{
+        res.send({
+            'status': 'NOPLAYERS'
+        });
+    }
+});
+
 // Connexion à partir du boutton Join
 app.post('/join', function(req, res) {
-    var username = req.body.username;
-    if (players.indexOf(username) === -1) {
-        players.push(username);
-        res.send({
-            'players': players,
-            'status': 'OK'
-        });
-    } else {
+    var user = req.body.user;
+    let player = players.find(u => u.id === user.id)
+    if (player) {
+        player.count++;
         res.send({
             'status': 'FAILED'
+        });
+    } else {
+        players.push(user);
+        console.log(players);
+        res.send({
+            'status': 'OK'
         });
     }
 });
@@ -62,12 +78,16 @@ app.post('/leave', function(req, res) {
 //////////////////////////////////////////////////////////////
 // EVENEMENTS SOCKETS PROVENANT DU CLIENT
 io.on('connection', function(socket) {
-    
+
     // New User
-    socket.on('newUser', function(username) {
-        socket.username = username;
-        socket.broadcast.emit('notifyNewUser', username, players);
-        socket.broadcast.emit('majListAdversaires', players);
+    socket.on('newUser', function(user) {
+        if(socket.user == null && socket.user == undefined){
+            socket.user = user;
+            socket.broadcast.emit('notifyNewUser', user);
+            //socket.broadcast.emit('majListAdversaires', players);
+        }else{
+            socket.emit('alreadyLogged', user);
+        }
     });
 
     // User disconnect with leave button
@@ -79,10 +99,17 @@ io.on('connection', function(socket) {
 
     // User disconnect with close windows
     socket.on('disconnect', function(){
-        if(socket.username != null && socket.username != undefined){
-            console.log('user '+socket.username+' disconnected');
-            players.splice(players.indexOf(socket.username), 1);
-            socket.broadcast.emit('notifyDeconnectUser', socket.username);
+        if(socket.user != null && socket.user != undefined){
+            let player = players.find(u => u.id === socket.user.id)
+            if(player){
+                player.count--;
+                if(player.count === 0){
+                    console.log('user '+socket.user.name+' disconnected');
+                    //players.splice(players.indexOf(socket.user.name), 1);
+                    players = players.filter(u => u.id !== socket.user.id);
+                    socket.broadcast.emit('notifyDeconnectUser', socket.user);
+                }
+            }
         }
     });
 

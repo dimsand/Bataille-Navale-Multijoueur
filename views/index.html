@@ -4,12 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
     <link rel="stylesheet" href="css/jeu.css">
     <link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet" type="text/css">
     <title>Jeu Multi</title>
 </head>
 <body>
-    <div id="login_screen">
+    <div id="login_screen" user_id="1">
         <label for="username">Username:</label>
         <input type="text" id="username" name="username" />
         <input type="button" id="join-chat" value="Join Chat" />
@@ -19,8 +20,8 @@
         <input type="button" id="leave-chat" data-username="" value="Leave Chat">
         <h2>Personnes connectés : </h2>
         <div id='nobody'><em>Aucune personne pour le moment...</em></div>
-        <ul id="list_users">
-        </ul>
+        <div id="list_users" class="list-group">
+        </div>
 
         <div id="game">
             <h4 id="consignes"></h4>
@@ -38,59 +39,9 @@
     <div><textarea id='log' style="width: 100%; height: 200px;"></textarea></div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.6.0/socket.io.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
     <script src="js/tools.js"></script>
+    <script src="js/game.js"></script>
     <script src="js/main.js"></script>
-    <script>
-        /*function logAction(message) {
-            var d = new Date(),
-            minutes = d.getMinutes().toString().length == 1 ? '0'+d.getMinutes() : d.getMinutes(),
-            hours = d.getHours().toString().length == 1 ? '0'+d.getHours() : d.getHours(),
-            seconds = d.getSeconds();
-            return hours+':'+minutes+':'+seconds+' - '+message+'\n';
-        }
-
-        var socket = io.connect('http://localhost:8080');
-        
-        // On demande le pseudo au visiteur...
-        var pseudo = prompt('Quel est votre pseudo ?');
-        // Et on l'envoie avec le signal "petit_nouveau" (pour le différencier de "message")
-        socket.emit('petit_nouveau', pseudo);
-        $('#log').append(logAction("Vous êtes bien connecté en tant que "+pseudo));
-
-
-        // On ajoute le pseudo du nouvel user dans la liste des users connectés
-        socket.on('majUserList', function(userList) {
-            if(userList.length > 0){
-                $('#nobody').hide();
-            }
-            for(var i=0; i < userList.length; i++){
-                if(userList[i].pseudo != pseudo){
-                    $('#list_users').append('<li id="'+userList[i].pseudo+'">'+userList[i].pseudo+'</li>');
-                }
-            }
-        });
-
-        // On ajoute le pseudo du nouvel user dans la liste des users connectés
-        socket.on('addUserList', function(newUserPseudo) {
-            console.log(newUserPseudo + " s'est connecté !");
-            $('#log').append(logAction(newUserPseudo + " s'est connecté !"));
-            $('#list_users').append('<li id="'+newUserPseudo+'">'+newUserPseudo+'</li>');
-        });
-
-        // On retire le pseudo du nouvel user dans la liste des users connectés
-        socket.on('removeUserList', function(userPseudo) {
-            console.log(userPseudo + " s'est déconnecté !");
-            $('#log').append(logAction(userPseudo + " s'est déconnecté !"));
-            $('#'+userPseudo).remove();
-        });
-
-        // On notifie dans la log la connexion d'un nouveau user
-        socket.on('notifNewUserToAll', function(message, userList) {
-            if(userList.length > 0){
-                $('#nobody').hide();
-            }
-            $('#log').append(logAction(message));
-        });*/
-    </script>
 </body>
 </html>

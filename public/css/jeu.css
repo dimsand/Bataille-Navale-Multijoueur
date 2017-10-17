@@ -86,3 +86,7 @@ h1{
   left: -34px;
   height: 90px;
 }
+
+.list-group-item{
+    cursor: pointer;
+}
