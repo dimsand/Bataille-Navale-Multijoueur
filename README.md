@@ -10,3 +10,9 @@ Test d'un jeu avec socket IO sur serveur NodeJs
 - Faire du design (formulaire connexion, ...)
 - Créer un objet pour l'user pour qu'il ait plus de données
 - Intégrer le jeu de la bataille navale : https://github.com/dimsand/BatailleNavaleJS
+
+- Créer un projet Laravel pour l'authentification (avec token, ... AIDE : https://www.youtube.com/watch?v=cdRFGsG2PI0&t=1078s&list=WL&index=587)
+
+- Intégrer une base de données pour les scores
+
+- Intégrer le système des joueurs dans le jeu
