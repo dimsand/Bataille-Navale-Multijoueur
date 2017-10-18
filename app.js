@@ -90,6 +90,20 @@ io.on('connection', function(socket) {
         }
     });
 
+    // Nouvelle demande de défi
+    socket.on('newDefi', function(JEU) {
+        var searchPlayer2 = players.find(u => u.id === JEU.Player2.id)
+        JEU.Player2 = searchPlayer2;
+        console.log("JOueur qui défi : " + JEU.Player1.name)
+        console.log("JOueur défié : " + JEU.Player2.name)
+        socket.broadcast.emit('newPartie', JEU);
+    });
+
+    // Lancement de la partie
+    socket.on('lancerPartieServeur', function(JEU) {
+        socket.broadcast.emit('lancerPartieClients', JEU);
+    });
+
     // User disconnect with leave button
     socket.on('disconnectUser', function(username){
         console.log('user '+socket.username+' disconnected');

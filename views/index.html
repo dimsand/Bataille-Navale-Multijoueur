@@ -12,10 +12,10 @@
 <body>
     <div id="login_screen" user_id="1">
         <label for="username">Username:</label>
-        <input type="text" id="username" name="username" />
+        <input type="text" id="username" name="username" autofocus/>
         <input type="button" id="join-chat" value="Join Chat" />
     </div>
-    <div id="game_screen">
+    <div id="game_screen" class="container">
         <label class="username"></label>
         <input type="button" id="leave-chat" data-username="" value="Leave Chat">
         <h2>Personnes connectés : </h2>
@@ -36,6 +36,49 @@
                 
         </div>
     </div>
+
+    <div class="modal fade bd-example-modal-sm" id="newDefi">
+        <div class="modal-dialog modal-sm" role="document">
+            <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Nouveau défi</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p><span id="nom_defieur"></span> vous défi à la bataille navale !</p>
+                <p>Si vous acceptez, vous allez jouer sur une grille de <span class="nb_cases_choisies"></span> par <span class="nb_cases_choisies"></span></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-success" id="btnAcceptDefi">Accepter</button>
+                <button type="button" class="btn btn-warning" data-dismiss="modal">Refuser</button>
+            </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade bd-example-modal-sm" id="attenteAdversaire">
+        <div class="modal-dialog modal-sm" role="document">
+            <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">En attente de l'adversaire</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">                
+                <p style="text-align: center;"><img style="height:60px;" src="https://i.pinimg.com/originals/58/4b/60/584b607f5c2ff075429dc0e7b8d142ef.gif"/></p>
+                <p style="text-align: center;">En attente de l'acceptation du défi par l'adversaire...</p>
+                <p style="text-align: right;">Fermeture dans 10 secondes...</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-warning" data-dismiss="modal">Annuler le défi</button>
+            </div>
+            </div>
+        </div>
+    </div>
+
     <div><textarea id='log' style="width: 100%; height: 200px;"></textarea></div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.6.0/socket.io.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>

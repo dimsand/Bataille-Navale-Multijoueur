@@ -1,18 +1,18 @@
-var Game = function(joueur1, joueur2){
+var Game = function(PARAMS_JEU){
     // INITIALISATION VARIABLES
     // Objets et tableaux
     var joueurs = new Array(
         {
-            'nom':joueur1.name, 
-            'nb_touche':0, 
-            'nb_coups':0, 
-            'last_coup':null
+            'nom': PARAMS_JEU.Player1.name, 
+            'nb_touche': 0, 
+            'nb_coups': 0, 
+            'last_coup': null
         }, 
         {
-            'nom':"Ordinateur "+joueur2, 
-            'nb_touche':0, 
-            'nb_coups':0, 
-            'last_coup':null
+            'nom': PARAMS_JEU.Player2.name, 
+            'nb_touche': 0, 
+            'nb_coups': 0, 
+            'last_coup': null
         }
     );
     var jeu = new Array({"joueur":joueurs[0], "grille":new Array()},{"joueur":joueurs[1],"grille":new Array()});
@@ -58,11 +58,8 @@ var Game = function(joueur1, joueur2){
     // Joueur en cours
     var currentJ = 0;
 
-    // Saisie du nombre de cases du plateau et du nom du joueur
-    var nb_cases = prompt("Entrer le nombre de case (10 <= X <= 26) - 11 par défaut");
+    nb_cases = parseInt(PARAMS_JEU.NbCasesPlateau);
     nb_cases = (nb_cases != "" ? nb_cases : 10)
-    //var nom_joueur = prompt("Quel est votre nom ?");
-    //joueurs[0].nom = (nom_joueur != "" ? nom_joueur : "Vous");
 
     // Vérif saisie et initialisation du jeu
     if(nb_cases < 10 || nb_cases > 26){

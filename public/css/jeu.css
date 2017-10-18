@@ -90,3 +90,7 @@ h1{
 .list-group-item{
     cursor: pointer;
 }
+
+-header .close {
+    margin-top: -21px !important;
+}

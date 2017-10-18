@@ -3,6 +3,7 @@ $(function () {
     var socket = io();
     var currentUSer;
     var userId = 0;
+    let JEU = {};
 
     // On met à jour le user_id
     $.ajax({
@@ -61,8 +62,9 @@ $(function () {
                             user: currentUSer
                         },
                         success: function(response) {
-                            if (response.status == 'OK') { //username doesn't already exists
+                            if (response.status == 'OK') { //username doesn't already exists                                
                                 $('#game_screen').show();
+                            
                                 $('#leave-chat').data('username', username);
                                 $('.username').text(username);
             
@@ -106,8 +108,34 @@ $(function () {
 
     // Click boutton Leave
     $(document).on('click', '.defiUser', function () {
-        $('#log').append(logAction(currentUSer.name + " défie le joueur " + $(this).attr('id')));
-        Game(currentUSer, $(this).attr('id'));
+        var IDjoueurDefie = $(this).attr('id');
+        var NomjoueurDefie = $(this).text();
+        var Joueur2 = {
+            id: IDjoueurDefie,
+            name: NomjoueurDefie,
+            count: null
+        };
+
+        // Saisie du nombre de cases du plateau et du nom du joueur
+        var nb_cases = prompt("Entrer le nombre de case (10 <= X <= 26) - 11 par défaut");
+
+        $('#log').append(logAction("Vous défiez " + NomjoueurDefie));
+        JEU = {Player1: currentUSer, Player2: Joueur2, NbCasesPlateau: nb_cases};
+        
+        $('#attenteAdversaire').modal('show');
+
+        // On envoi la demande sur le serveur qui la transmettra au joueur défié
+        socket.emit('newDefi', JEU);
+    });
+
+    // Click boutton Leave
+    $(document).on('click', '#btnAcceptDefi', function () {
+        console.log("Lancement de la partie sur le serveur...");
+        console.log("JEU : ");
+        console.log(JEU);
+        Game(JEU);
+        $('#newDefi').modal('hide');
+        socket.emit('lancerPartieServeur', JEU);
     });
 
     //////////////////////////////////////////////////////////////
@@ -127,6 +155,25 @@ $(function () {
         $('#log').append(logAction(user.name + ", vous êtes déjà connecté !"));
         $('#game_screen').show();
         $('#login_screen').hide(); //hide the container for joining the chat room.
+    });
+
+    // Affichage de la demande de défi
+    socket.on('newPartie', function (jeu) {
+        if(parseInt(jeu.Player2.id) === parseInt(currentUSer.id)){
+            JEU = jeu;
+            $('#log').append(logAction(jeu.Player1.name + " vous défie !"));
+            $('#nom_defieur').html(jeu.Player1.name);
+            $('.nb_cases_choisies').html(jeu.NbCasesPlateau);
+            $('#newDefi').modal('show');
+        }
+    });
+
+    // Lancement de la partie sur les clients
+    socket.on('lancerPartieClients', function (jeu) {
+        if(parseInt(jeu.Player1.id) === parseInt(currentUSer.id)){
+            Game(JEU);
+            $('#attenteAdversaire').modal('hide');                
+        }
     });
 
     // Notifie à tous les users de la déconnexion d'un utilisateur
