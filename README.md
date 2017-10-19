@@ -7,6 +7,11 @@ Test d'un jeu avec socket IO sur serveur NodeJs
 
 ## Todo
 
+**# Le 19/10/2017**
+- Gérer le cas où le défieur annule le défi (modal qui se ferme de l'autre coté aussi)
+- Faire un système d'inscription
+- Faire une vérification de l'existence du pseudo du joueur
+
 **# Le 18/10/2017**
 - Enlever le système d'ordinateur et permettre aux 2 joueurs de jouer
 - Gérer la synchronisation des jeux des 2 cotés à chaque fois qu'un des 2 joueurs jouent

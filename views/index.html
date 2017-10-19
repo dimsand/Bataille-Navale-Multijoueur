@@ -6,18 +6,51 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
     <link rel="stylesheet" href="css/jeu.css">
+    <link rel="stylesheet" href="css/login.css">
     <link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet" type="text/css">
+    <link href='http://fonts.googleapis.com/css?family=Raleway:400,200' rel='stylesheet' type='text/css'>
     <title>Jeu Multi</title>
 </head>
 <body>
     <div id="login_screen" user_id="1">
-        <label for="username">Username:</label>
-        <input type="text" id="username" name="username" autofocus/>
-        <input type="button" id="join-chat" value="Join Chat" />
+        <div class="container">
+            <div class="row login_box">
+                <div class="col-md-12 col-xs-12" align="center">
+                    <div class="line"><h3>12 : 30 AM</h3></div>
+                    <div class="outter"><img src="http://lorempixel.com/output/people-q-c-100-100-1.jpg" class="image-circle"/></div>   
+                    <h1>Hi Guest</h1>
+                    <span>FRANCE</span>
+                </div>
+                <div class="col-md-6 col-xs-6 follow line" align="center">
+                    <h3>
+                            125651 <br/> <span>connectés</span>
+                    </h3>
+                </div>
+                <div class="col-md-6 col-xs-6 follow line" align="center">
+                    <h3>
+                            125651 <br/> <span>joueurs</span>
+                    </h3>
+                </div>
+                
+                <div class="col-md-12 col-xs-12 login_control">
+                    <div class="control">
+                        <div class="label">Pseudo</div>
+                        <input type="text" class="form-control" id="username" name="username" value="test1" autofocus/>
+                    </div>
+                    <div class="control">
+                        <div class="label">Password</div>
+                        <input type="password" class="form-control" value="0000"/>
+                    </div>
+                    <div align="center">
+                        <button class="btn btn-orange" id="join-chat">PLAY</button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
     <div id="game_screen" class="container">
         <label class="username"></label>
-        <input type="button" id="leave-chat" data-username="" value="Leave Chat">
+        <button type="button" id="leave-chat" data-username="" class="btn btn-warning">Leave Chat</button>
         <h2>Personnes connectés : </h2>
         <div id='nobody'><em>Aucune personne pour le moment...</em></div>
         <div id="list_users" class="list-group">
@@ -79,7 +112,7 @@
         </div>
     </div>
 
-    <div><textarea id='log' style="width: 100%; height: 200px;"></textarea></div>
+    <div><textarea id="log"></textarea></div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.6.0/socket.io.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>

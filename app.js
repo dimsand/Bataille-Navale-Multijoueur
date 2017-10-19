@@ -60,20 +60,11 @@ app.post('/join', function(req, res) {
         players.push(user);
         console.log(players);
         res.send({
-            'status': 'OK'
+            'status': 'OK',
+            'players': players
         });
     }
 });
-
-// Déconnexion à partir du bouton Leave
-app.post('/leave', function(req, res) {
-    var username = req.body.username;
-    players.splice(players.indexOf(username), 1);
-    res.send({
-        'status': 'OK'
-    });
-});
-
 
 //////////////////////////////////////////////////////////////
 // EVENEMENTS SOCKETS PROVENANT DU CLIENT
@@ -84,7 +75,8 @@ io.on('connection', function(socket) {
         if(socket.user == null && socket.user == undefined){
             socket.user = user;
             socket.broadcast.emit('notifyNewUser', user);
-            //socket.broadcast.emit('majListAdversaires', players);
+            console.log('maj adversaire')
+            socket.emit('majListAdversaires', {newPlayer: user, players: players});
         }else{
             socket.emit('alreadyLogged', user);
         }
@@ -105,24 +97,28 @@ io.on('connection', function(socket) {
     });
 
     // User disconnect with leave button
-    socket.on('disconnectUser', function(username){
-        console.log('user '+socket.username+' disconnected');
-        players.splice(players.indexOf(username), 1);
-        socket.broadcast.emit('notifyDeconnectUser', username);
+    socket.on('disconnectUser', function(user){
+        console.log('DISCONNECT HERE !!!')
+        console.log(user);
+        console.log(players);
+        let player = players.find(u => parseInt(u.id) === parseInt(user.id))
+        if(player){
+            console.log('user '+user.name+' disconnected from leaving button');
+            players = players.filter(u => parseInt(u.id) !== parseInt(user.id));
+            socket.broadcast.emit('notifyDeconnectUser', user);
+            socket.user = null;
+        }
     });
 
     // User disconnect with close windows
     socket.on('disconnect', function(){
         if(socket.user != null && socket.user != undefined){
-            let player = players.find(u => u.id === socket.user.id)
+            let player = players.find(u => parseInt(u.id) === parseInt(socket.user.id))
             if(player){
-                player.count--;
-                if(player.count === 0){
-                    console.log('user '+socket.user.name+' disconnected');
-                    //players.splice(players.indexOf(socket.user.name), 1);
-                    players = players.filter(u => u.id !== socket.user.id);
-                    socket.broadcast.emit('notifyDeconnectUser', socket.user);
-                }
+                console.log('user '+socket.user.name+' disconnected from close window');
+                players = players.filter(u => parseInt(u.id) !== parseInt(socket.user.id));
+                socket.broadcast.emit('notifyDeconnectUser', socket.user);
+                socket.user = null;
             }
         }
     });

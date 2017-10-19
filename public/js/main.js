@@ -73,6 +73,7 @@ $(function () {
                                 $('#log').append(logAction("Vous êtes bien connecté en tant que : " + username ));
             
                                 $('#login_screen').hide(); //hide the container for joining the chat room.
+                                
                             } else if (response.status == 'FAILED') { //username already exists
                                 alert("Sorry but the username already exists, please choose another one");
                                 $('#username').val('').focus();
@@ -85,28 +86,19 @@ $(function () {
     });
 
     // Click boutton Leave
-    $('#leave-chat').click(function () {
-        var username = $(this).data('username');
-        $.ajax({
-            url: '/leave',
-            type: 'POST',
-            dataType: 'json',
-            data: {
-                username: username
-            },
-            success: function (response) {
-                if (response.status == 'OK') {
-                    $('#game_screen').hide();
-                    $('#login_screen').show();
-                    $('#username').val('');
-                    socket.emit('disconnectUser', username);
-                    alert('You have successfully left the chat room');
-                }
-            }
-        });
+    $(document).on('click', '#leave-chat', function () {
+        $('#game_screen').hide();
+        $('#login_screen').show();
+        $('#username').val('test1');
+        console.log(currentUSer);
+        socket.emit('disconnectUser', currentUSer);
+        currentUSer = null;
+        JEU = {};
+        $('#log').append(logAction("Vous êtes bien déconnecté !"));
+        alert('You have successfully left the chat room');
     });
 
-    // Click boutton Leave
+    // Click sur un user de la liste
     $(document).on('click', '.defiUser', function () {
         var IDjoueurDefie = $(this).attr('id');
         var NomjoueurDefie = $(this).text();
@@ -178,20 +170,25 @@ $(function () {
 
     // Notifie à tous les users de la déconnexion d'un utilisateur
     socket.on('notifyDeconnectUser', function (oldUser) {
+        console.log('DISCONNECT LEAVING')
         $('#log').append(logAction(oldUser.name + " s'est déconnecté !"));
         $('#'+oldUser.id).remove();
     });
 
     // MAJ de la liste des adversaires dispo
-    socket.on('majListAdversaires', function(players){
-        if(players.length > 1){
+    socket.on('majListAdversaires', function(retour){
+        if(retour.players.length > 1){
             $('#nobody').hide();
         }
-        console.log("MAJ players : " + players);
+        console.log("MAJ players : " + retour.players);
         $('#list_users').empty();
-        for(var i=0; i < players.length; i++){
-            if(players[i] != currentUSer){
-                $('#list_users').append('<li id="'+players[i]+'">'+players[i]+'</li>');
+        for(var i=0; i < retour.players.length; i++){
+            if(retour.players[i].id != retour.newPlayer.id){
+                if(parseInt(retour.players[i].id) != parseInt(currentUSer.id)){
+                    $('#list_users').append('<a class="defiUser list-group-item" id="'+retour.players[i].id+'">'+retour.players[i].name+'</a>');
+                }
+            }else{
+                //$('#list_users').append('<a class="defiUser list-group-item" id="'+retour.players[i].id+'">'+retour.players[i].name+'</a>');
             }
         }
     });
