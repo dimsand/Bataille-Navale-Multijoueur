@@ -5,6 +5,10 @@ $(function () {
     var userId = 0;
     let JEU = {};
 
+    // Initialisation vers le serveur
+    console.log('INIT');
+    socket.emit('init');
+
     // On met à jour le user_id
     $.ajax({
         url: '/getLastUserId',
@@ -52,6 +56,7 @@ $(function () {
                     $('#log').append(logAction("Vous êtes bien connecté en tant que : " + username ));
 
                     $('#login_screen').hide(); //hide the container for joining the chat room.
+                    $('#leave-chat').show(); //hide the container for joining the chat room.
                 } else if (response.status == 'FAILED') { //username already exists
                     // Si l'ID existe déjà, on incrémente l'ID et on rééessaye
                     currentUSer.id = parseInt(currentUSer.id) + 1;
@@ -73,6 +78,7 @@ $(function () {
                                 $('#log').append(logAction("Vous êtes bien connecté en tant que : " + username ));
             
                                 $('#login_screen').hide(); //hide the container for joining the chat room.
+                                $('#leave-chat').show(); //hide the container for joining the chat room.
                                 
                             } else if (response.status == 'FAILED') { //username already exists
                                 alert("Sorry but the username already exists, please choose another one");
@@ -89,6 +95,7 @@ $(function () {
     $(document).on('click', '#leave-chat', function () {
         $('#game_screen').hide();
         $('#login_screen').show();
+        $('#leave-chat').hide();
         $('#username').val('test1');
         console.log(currentUSer);
         socket.emit('disconnectUser', currentUSer);
@@ -133,8 +140,14 @@ $(function () {
     //////////////////////////////////////////////////////////////
     // EVENEMENTS SOCKETS PROVENANT DU SERVEUR
 
+    socket.on('majNbStats', function (players) {
+        console.log(players.length);
+        $('#nb_users_connected').html(players.length);
+    });
+
     // Notifie à tous les users de la connexion d'un utilisateur
-    socket.on('notifyNewUser', function (newUser) {
+    socket.on('notifyNewUser', function (retour) {
+        newUser = retour.newPlayer;
         $('#log').append(logAction(newUser.name + " vient de se connecter !"));
         if($("#nobody").css('display') != 'none'){
             $('#nobody').hide();
@@ -147,6 +160,7 @@ $(function () {
         $('#log').append(logAction(user.name + ", vous êtes déjà connecté !"));
         $('#game_screen').show();
         $('#login_screen').hide(); //hide the container for joining the chat room.
+        $('#leave-chat').show(); //hide the container for joining the chat room.
     });
 
     // Affichage de la demande de défi
@@ -169,10 +183,13 @@ $(function () {
     });
 
     // Notifie à tous les users de la déconnexion d'un utilisateur
-    socket.on('notifyDeconnectUser', function (oldUser) {
+    socket.on('notifyDeconnectUser', function (retour) {
         console.log('DISCONNECT LEAVING')
-        $('#log').append(logAction(oldUser.name + " s'est déconnecté !"));
-        $('#'+oldUser.id).remove();
+        $('#log').append(logAction(retour.oldUser.name + " s'est déconnecté !"));
+        $('#'+retour.oldUser.id).remove();
+        if(retour.players.length < 2){
+            $('#nobody').show();
+        }
     });
 
     // MAJ de la liste des adversaires dispo
@@ -187,8 +204,6 @@ $(function () {
                 if(parseInt(retour.players[i].id) != parseInt(currentUSer.id)){
                     $('#list_users').append('<a class="defiUser list-group-item" id="'+retour.players[i].id+'">'+retour.players[i].name+'</a>');
                 }
-            }else{
-                //$('#list_users').append('<a class="defiUser list-group-item" id="'+retour.players[i].id+'">'+retour.players[i].name+'</a>');
             }
         }
     });

@@ -31,3 +31,7 @@ Test d'un jeu avec socket IO sur serveur NodeJs
 - Faire du design (formulaire connexion, ...)
 - Créer un objet pour l'user pour qu'il ait plus de données
 - Intégrer le jeu de la bataille navale : https://github.com/dimsand/BatailleNavaleJS
+
+
+## Déploiement
+- http://www.lilleweb.fr/js/2015/05/18/mettre-en-production-application-nodejs/

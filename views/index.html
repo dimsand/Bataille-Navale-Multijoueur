@@ -12,23 +12,33 @@
     <title>Jeu Multi</title>
 </head>
 <body>
+
+    <nav class="navbar-perso">
+        <div>Bataille navale</div>
+        <div>
+            <label class="username"></label><br>
+            <button type="button" id="leave-chat" data-username="" class="btn btn-warning btn-sm">Déconnexion</button>
+        </div>
+    </nav>
+
     <div id="login_screen" user_id="1">
         <div class="container">
             <div class="row login_box">
                 <div class="col-md-12 col-xs-12" align="center">
                     <div class="line"><h3>12 : 30 AM</h3></div>
-                    <div class="outter"><img src="http://lorempixel.com/output/people-q-c-100-100-1.jpg" class="image-circle"/></div>   
+                       
                     <h1>Hi Guest</h1>
                     <span>FRANCE</span>
                 </div>
+                <div class="outter"><img src="img/logo.png" class="image-circle"/></div>
                 <div class="col-md-6 col-xs-6 follow line" align="center">
                     <h3>
-                            125651 <br/> <span>connectés</span>
+                            <span id="nb_users_connected">0</span> <br/> <span>connectés</span>
                     </h3>
                 </div>
                 <div class="col-md-6 col-xs-6 follow line" align="center">
                     <h3>
-                            125651 <br/> <span>joueurs</span>
+                        <span id="nb_joueurs_en_jeu">0</span> <br/> <span>joueurs</span>
                     </h3>
                 </div>
                 
@@ -49,8 +59,6 @@
         </div>
     </div>
     <div id="game_screen" class="container">
-        <label class="username"></label>
-        <button type="button" id="leave-chat" data-username="" class="btn btn-warning">Leave Chat</button>
         <h2>Personnes connectés : </h2>
         <div id='nobody'><em>Aucune personne pour le moment...</em></div>
         <div id="list_users" class="list-group">
@@ -59,11 +67,11 @@
         <div id="game">
             <h4 id="consignes"></h4>
                 
-            <div id="tableau-J0">
+            <div id="tableau-J0" class="tableaux">
         
             </div>
         
-            <div id="tableau-J1">
+            <div id="tableau-J1" class="tableaux">
             
             </div>
                 

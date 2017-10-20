@@ -70,13 +70,20 @@ app.post('/join', function(req, res) {
 // EVENEMENTS SOCKETS PROVENANT DU CLIENT
 io.on('connection', function(socket) {
 
+    // Affichage de la page
+    socket.on('init', function() {
+        console.log('nb users : ' + players.length);
+        socket.broadcast.emit('majNbStats', players);
+    });
+
     // New User
     socket.on('newUser', function(user) {
         if(socket.user == null && socket.user == undefined){
             socket.user = user;
-            socket.broadcast.emit('notifyNewUser', user);
+            socket.broadcast.emit('notifyNewUser', {newPlayer: user, players: players});
             console.log('maj adversaire')
             socket.emit('majListAdversaires', {newPlayer: user, players: players});
+            socket.broadcast.emit('majNbStats', players);
         }else{
             socket.emit('alreadyLogged', user);
         }
@@ -105,8 +112,11 @@ io.on('connection', function(socket) {
         if(player){
             console.log('user '+user.name+' disconnected from leaving button');
             players = players.filter(u => parseInt(u.id) !== parseInt(user.id));
-            socket.broadcast.emit('notifyDeconnectUser', user);
+            socket.broadcast.emit('notifyDeconnectUser', {oldUser: user, players: players});
             socket.user = null;
+            console.log("USERS RESTANTS : ");
+            console.log(players);
+            socket.broadcast.emit('majNbStats', players);          
         }
     });
 
@@ -119,6 +129,7 @@ io.on('connection', function(socket) {
                 players = players.filter(u => parseInt(u.id) !== parseInt(socket.user.id));
                 socket.broadcast.emit('notifyDeconnectUser', socket.user);
                 socket.user = null;
+                socket.broadcast.emit('majNbStats', players);
             }
         }
     });
