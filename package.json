@@ -1,18 +1,23 @@
 {
   "name": "testjeumulti",
-  "version": "1.0.0",
-  "description": "Un test d'un jeu multijoueur en ligne",
-  "main": "app.js",
+  "version": "0.0.1",
+  "description": "Jeu multijoueur de la Bataille Navale en ligne",
+  "main": "/bin/www",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "nodemon ./bin/www"
   },
   "author": "Dimitri Sandron",
   "license": "ISC",
   "dependencies": {
     "body-parser": "^1.18.2",
+    "cookie-parser": "~1.4.3",
+    "debug": "~2.6.9",
     "expressjs": "^1.0.1",
     "redis": "^2.8.0",
     "socket.io": "^2.0.3",
-    "socketio": "^1.0.0"
+    "socketio": "^1.0.0",
+    "twig": "^1.10.5",
+    "morgan": "~1.9.0",
+    "serve-favicon": "~2.4.5"
   }
 }

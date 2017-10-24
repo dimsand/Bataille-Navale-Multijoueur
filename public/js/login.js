@@ -3,7 +3,7 @@ $(function () {
     var socket = io('http://localhost:3000');
     var currentUSer;
     var userId = 0;
-    let JEU = {};
+    var JEU = {};
 
     // Initialisation vers le serveur
     console.log('INIT');
@@ -47,16 +47,16 @@ $(function () {
             },
             success: function(response) {
                 if (response.status == 'OK') { //username doesn't already exists
+                    $('#game_screen').show();
                     $('#leave-chat').data('username', username);
                     $('.username').text(username);
 
                     // On prévient le serveur de l'arrivée du nouveau user
                     socket.emit('newUser', currentUSer);
-                    console.log('emit');
                     $('#log').append(logAction("Vous êtes bien connecté en tant que : " + username ));
 
-                    document.location.href = "/game";
-                    
+                    $('#login_screen').hide(); //hide the container for joining the chat room.
+                    $('#leave-chat').show(); //hide the container for joining the chat room.
                 } else if (response.status == 'FAILED') { //username already exists
                     // Si l'ID existe déjà, on incrémente l'ID et on rééessaye
                     currentUSer.id = parseInt(currentUSer.id) + 1;
@@ -67,7 +67,6 @@ $(function () {
                             user: currentUSer
                         },
                         success: function(response) {
-                            console.log(response);
                             if (response.status == 'OK') { //username doesn't already exists                                
                                 $('#game_screen').show();
                             

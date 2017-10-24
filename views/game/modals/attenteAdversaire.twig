@@ -1,0 +1,24 @@
+{% extends '../index.twig' %}
+
+{% block modals %}
+<div class="modal fade bd-example-modal-sm" id="attenteAdversaire">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title">En attente de l'adversaire</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">                
+            <p style="text-align: center;"><img style="height:60px;" src="https://i.pinimg.com/originals/58/4b/60/584b607f5c2ff075429dc0e7b8d142ef.gif"/></p>
+            <p style="text-align: center;">En attente de l'acceptation du défi par l'adversaire...</p>
+            <p style="text-align: right;">Fermeture dans 10 secondes...</p>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-warning" data-dismiss="modal">Annuler le défi</button>
+        </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,24 @@
+{% extends '../index.twig' %}
+
+{% block modals %}
+<div class="modal fade bd-example-modal-sm" id="newDefi">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title">Nouveau défi</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <p><span id="nom_defieur"></span> vous défi à la bataille navale !</p>
+            <p>Si vous acceptez, vous allez jouer sur une grille de <span class="nb_cases_choisies"></span> par <span class="nb_cases_choisies"></span></p>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-success" id="btnAcceptDefi">Accepter</button>
+            <button type="button" class="btn btn-warning" data-dismiss="modal">Refuser</button>
+        </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

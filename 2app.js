@@ -1,73 +1,75 @@
 var express = require('express');
-var path = require('path');
-var favicon = require('serve-favicon');
-var logger = require('morgan');
-var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
-
-var login = require('./routes/login');
-var game = require('./routes/game');
-
 var app = express();
-var server = require('http').Server(app);
-var io = require('socket.io')(server);
+var http = require('http').Server(app);
+var io = require('socket.io')(http);
+
+var fs = require('fs');
+var creds = '';
+
+var redis = require('redis');
+var client = '';
+var port = process.env.PORT || 3000;
+
+// Express Middleware for serving static
+// files and parsing the request body
+app.use(express.static('public'));
+app.use(bodyParser.urlencoded({
+    extended: true
+}));
+
+// Start the Server
+http.listen(port, function() {
+    console.log('Server Started. Listening on *:' + port);
+});
 
 // Store people in chatroom
 var players = [];
 
-// view engine setup
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'twig');
-
-// uncomment after placing your favicon in /public
-//app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
-app.use(logger('dev'));
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
-
-app.use('/', login);
-app.use('/game', game);
+// Render Main HTML file
+app.get('/', function (req, res) {
+    res.sendFile('views/index.html', {
+        root: __dirname
+    });
+});
 
 // Get le dernier id user
 app.get('/getLastUserId', function (req, res) {
-  console.log('PLAYERS : ');
-  console.log(players)
-  if(players.length > 0){
-      res.send({
-          'status': 'OK',
-          'lastUserId': players[(players.length)-1].id
-      });
-  }else{
-      res.send({
-          'status': 'NOPLAYERS'
-      });
-  }
+    if(players.length > 0){
+        res.send({
+            'status': 'OK',
+            'lastUserId': players[(players.length)-1].id
+        });
+    }else{
+        res.send({
+            'status': 'NOPLAYERS'
+        });
+    }
 });
 
-// catch 404 and forward to error handler
-app.use(function(req, res, next) {
-  var err = new Error('Not Found');
-  err.status = 404;
-  next(err);
-});
-
-// error handler
-app.use(function(err, req, res, next) {
-  // set locals, only providing error in development
-  res.locals.message = err.message;
-  res.locals.error = req.app.get('env') === 'development' ? err : {};
-
-  // render the error page
-  res.status(err.status || 500);
-  res.render('error');
+// Connexion à partir du boutton Join
+app.post('/join', function(req, res) {
+    var user = req.body.user;
+    let player = players.find(u => u.id === user.id)
+    if (player) {
+        player.count++;
+        res.send({
+            'status': 'FAILED'
+        });
+    } else {
+        players.push(user);
+        console.log(players);
+        res.send({
+            'status': 'OK',
+            'players': players
+        });
+    }
 });
 
 //////////////////////////////////////////////////////////////
 // EVENEMENTS SOCKETS PROVENANT DU CLIENT
 io.on('connection', function(socket) {
-  
+
     // Affichage de la page
     socket.on('init', function() {
         console.log('nb users : ' + players.length);
@@ -89,8 +91,7 @@ io.on('connection', function(socket) {
 
     // Nouvelle demande de défi
     socket.on('newDefi', function(JEU) {
-      console.log(JEU);
-        var searchPlayer2 = players.find(u => u.id === parseInt(JEU.Player2.id))
+        var searchPlayer2 = players.find(u => u.id === JEU.Player2.id)
         JEU.Player2 = searchPlayer2;
         console.log("JOueur qui défi : " + JEU.Player1.name)
         console.log("JOueur défié : " + JEU.Player2.name)
@@ -134,5 +135,3 @@ io.on('connection', function(socket) {
     });
 
 });
-
-module.exports = {app: app, server: server};

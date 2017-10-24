@@ -13,10 +13,6 @@ textarea#log{
     text-align: center;
 }
 
-#game_screen{
-    display: none;
-}
-
 h1{
   font-size: 45px;
 }
