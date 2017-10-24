@@ -99,8 +99,8 @@ io.on('connection', function(socket) {
     });
 
     // Lancement de la partie
-    socket.on('lancerPartieServeur', function(JEU) {
-        socket.broadcast.emit('lancerPartieClients', JEU);
+    socket.on('lancerPartieServeur', function(GAME) {
+        socket.broadcast.emit('lancerPartieClients', GAME);
     });
 
     // User disconnect with leave button

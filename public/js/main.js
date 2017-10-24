@@ -132,9 +132,12 @@ $(function () {
         console.log("Lancement de la partie sur le serveur...");
         console.log("JEU : ");
         console.log(JEU);
-        Game(JEU);
+        $('#game').show();
+        var GAME = InitGrilles(JEU);
+        console.log(GAME);
+        InitCssGrilles(GAME);
         $('#newDefi').modal('hide');
-        socket.emit('lancerPartieServeur', JEU);
+        socket.emit('lancerPartieServeur', GAME);
     });
 
     //////////////////////////////////////////////////////////////
@@ -176,8 +179,10 @@ $(function () {
 
     // Lancement de la partie sur les clients
     socket.on('lancerPartieClients', function (jeu) {
-        if(parseInt(jeu.Player1.id) === parseInt(currentUSer.id)){
-            Game(JEU);
+        if(parseInt(jeu.joueurs[0].infos.id) === parseInt(currentUSer.id)){
+            InitCssGrilles(jeu);
+            console.log(jeu);
+            $('#game').show();
             $('#attenteAdversaire').modal('hide');                
         }
     });

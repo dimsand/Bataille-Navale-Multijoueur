@@ -1,6 +1,6 @@
 textarea#log{
     width: 100%;
-    height: 50px;
+    height: 0px;
     position: fixed;
     bottom: 0;
     background: rgba(0, 0, 0, 0.5);
@@ -8,23 +8,36 @@ textarea#log{
 }
 
 #game{
-    margin: 20px;
-    background-color: #f5f5f5;
+    display: none;
     text-align: center;
+    margin-bottom: 30px;
+}
+
+#game .row{
+    margin: 0;
+}
+
+#game .tableaux{
+    background-color: #f5f5f5;
+    padding-top: 15px;
+    padding-bottom: 15px;
 }
 
 #game_screen{
     display: none;
+    margin-top: -25px;
 }
 
 h1{
   font-size: 45px;
 }
-#tableau-J0, #tableau-J1{
+
+/*#tableau-J0, #tableau-J1{
     width: 48%;
     margin: 10px 1%;
     float: left;
-}
+}*/
+
 .ligne{
     display: flex;
     justify-content: center;
@@ -42,16 +55,35 @@ h1{
   margin-top: 10px;
 }
 .case{
-    height: 30px;
-    width: 30px;
+    height: 45px;
+    width: 45px;
+    /*width: calc(100% / 11);*/
     background-color: #efefef;
     border: solid #adadad 1px;
     margin-right: 1px;
     margin-bottom: 1px;
     cursor: pointer;
-    font-size: 1.6em;
+    font-size: 2em;
     text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
+
+tableau-J1 {
+    border-right: solid #2b2b2b 1px;
+}
+
+@media (max-width: 767px) {
+    .case{
+        height: 30px;
+        width: 30px;
+    }
+    #tableau-J1{
+        border-bottom: solid #2b2b2b 1px;
+    }
+}
+
 .case.touche, .case.touche:hover{
     color: red;
     font-weight: bold;

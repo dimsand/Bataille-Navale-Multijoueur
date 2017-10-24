@@ -7,6 +7,16 @@ Test d'un jeu avec socket IO sur serveur NodeJs
 
 ## Todo
 
+**# Le 24/10/2017**
+- Synchro ok
+- Ne pas voir le jeu de celui d'en face
+- Chaque joueur doit pouvoir jouer sur le jeu d'en face (à gauche ou en haut pour mobile) et voir son jeu en opacité (à droite ou en bas sur mobile)
+- Ajouter icones et/ou couleur sur le joueur avec qui on joue dans la liste des personens connectés
+- Revoir si le système de la maj de la liste des users connectés fonctionne bien
+- Gérer la déconnexion en pleine partie
+- Gérer le score et les gagnants/perdants
+- Faire système de chat (pour plus tard)
+
 **# Le 19/10/2017**
 - Gérer le cas où le défieur annule le défi (modal qui se ferme de l'autre coté aussi)
 - Faire un système d'inscription
