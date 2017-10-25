@@ -53,6 +53,7 @@ h1{
 }
 .infos_user{
   margin-top: 10px;
+  display: block;
 }
 .case{
     height: 45px;
@@ -150,4 +151,13 @@ tableau-J1 {
 
 #leave-chat{
     display: none;
+}
+
+.case_adversaire{
+
+}
+
+.case_perso{
+    cursor: no-drop;
+    opacity: 0.5;
 }

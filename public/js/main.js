@@ -135,7 +135,8 @@ $(function () {
         $('#game').show();
         var GAME = InitGrilles(JEU);
         console.log(GAME);
-        InitCssGrilles(GAME);
+        InitCssGrilles(GAME, false);
+        Game(GAME);
         $('#newDefi').modal('hide');
         socket.emit('lancerPartieServeur', GAME);
     });
@@ -180,7 +181,8 @@ $(function () {
     // Lancement de la partie sur les clients
     socket.on('lancerPartieClients', function (jeu) {
         if(parseInt(jeu.joueurs[0].infos.id) === parseInt(currentUSer.id)){
-            InitCssGrilles(jeu);
+            InitCssGrilles(jeu, true);
+            Game(jeu);
             console.log(jeu);
             $('#game').show();
             $('#attenteAdversaire').modal('hide');                

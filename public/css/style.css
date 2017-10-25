@@ -1,0 +1,60 @@
+ul.icon_hamburger, li.icon_hamburger{
+    margin:0;
+    padding:0;
+}
+  
+li.icon_hamburger {
+    background: white;
+    border: solid black 1px;
+    width: 36px;
+    height: 6px;
+    transition: .5s linear;
+    list-style: none;
+}
+
+.mid, .bot{
+margin-top: 3px;
+}
+
+label.icon_hamburger {
+    cursor: pointer;
+    width: 36px;
+    height: 24px;
+    top: 20px;
+    position: fixed;
+}
+
+input.icon_hamburger[type=checkbox]{
+    position: fixed;
+    left: -9999px;
+}
+
+input.icon_hamburger[type=checkbox]:checked ~ label.icon_hamburger ul.icon_hamburger li.icon_hamburger {
+    width: 6px;
+}
+
+/*nav*/
+.rounded-rectangle {
+    height: auto;
+    width: 100%;
+}
+
+.rectangle {
+    width: 27%;
+}
+
+.drawer {
+    height: 100%;
+    width: 0;
+    background: #cd4538;
+    transition: .5s linear;
+    position: fixed;
+    top: 59px;
+    left: -22%;
+    padding: 15px;
+}
+
+input.icon_hamburger[type=checkbox]:checked ~ .rounded-rectangle .rectangle .drawer {
+    width: 22%;
+    left: 0;
+}

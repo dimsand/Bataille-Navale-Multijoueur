@@ -8,7 +8,7 @@ body{
     color : rgb(41, 41, 41) !important;
 }
 
-.tableaux .infos_user, #consignes{
+.tableaux, #consignes{
     color : #FFF !important;
 }
 

@@ -1,0 +1,87 @@
+<style>
+
+ul, li{
+  margin:0;
+  padding:0;
+}
+
+li {
+    background: white;
+    border: solid black 1px;
+    width: 36px;
+    height: 6px;
+    transition: .5s linear;
+    list-style: none;
+}
+
+.mid, .bot{
+  margin-top: 3px;
+}
+
+label {
+    cursor: pointer;
+    width: 36px;
+    height: 24px;
+    padding: 10px;
+    position: fixed;
+}
+
+input[type=checkbox]{
+	position: fixed;
+	left: -9999px;
+}
+
+input[type=checkbox]:checked ~ label ul li {
+    	width: 6px;
+}
+
+/*nav*/
+.rounded-rectangle {
+    height: auto;
+    width: 100%;
+}
+
+.rectangle {
+    width: 27%;
+}
+
+.circle {
+  height: 40px;
+  width: 40px;
+  margin-left: 110px;
+  border: 1px solid black;
+  border-radius: 20px;
+  
+}
+
+.drawer {
+    height: 100%;
+    width: 0px;
+    background: #cd4538;
+    transition: .5s linear;
+}
+
+input[type=checkbox]:checked ~ .rounded-rectangle .rectangle .drawer {
+    	width: 80%;
+}
+
+</style>
+
+<input type="checkbox" id="toggle">
+
+<!--icon-->
+<label for="toggle" onclick>
+	<ul>
+		<li class="top"></li>
+		<li class="mid"></li>
+		<li class="bot"></li>
+	</ul>
+</label>
+
+<!--nav-->
+<div class="rounded-rectangle">
+  <div class="rectangle">
+    <div class="drawer">
+    </div>
+  </div>
+</div>

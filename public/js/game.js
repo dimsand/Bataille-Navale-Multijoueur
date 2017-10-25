@@ -159,13 +159,13 @@ var InitGrilles = function(PARAMS_JEU){
 
 /////////////////////////////////////////////////////////////////////////////
 
-var InitCssGrilles = function(JEU){
+var InitCssGrilles = function(JEU, forAdversaire){
 
-    let jeu = JEU.plateau;
-    let nb_cases = JEU.nb_cases;
-    let joueurs = JEU.joueurs;
+    var jeu = JEU.plateau;
+    var nb_cases = JEU.nb_cases;
+    var joueurs = JEU.joueurs;
 
-    // On crée les cases du plateau de jeu
+    // On crée la grille de chaque joueur
     for(currentJ=0; currentJ<=1; currentJ++){
         
         var tableau_html = "";
@@ -181,47 +181,52 @@ var InitCssGrilles = function(JEU){
             tableau_html += '<div class="ligne">';
             tableau_html += '<div class="case coordonnees">'+i+'</div>';
             for(var j=1; j<=nb_cases; j++){
-                if(jeu[currentJ].grille[i][j].bateau){
-                    tableau_html += '<div class="case '+jeu[currentJ].grille[i][j].bateau.couleur+' '+jeu[currentJ].grille[i][j].bateau.etat[currentJ]+' '+jeu[currentJ].grille[i][j].etat+'" data-x="'+i+'" data-y="'+j+'"></div>';
+                if((!forAdversaire && currentJ == 0) || (forAdversaire && currentJ == 1)){
+                    if(jeu[currentJ].grille[i][j].bateau){
+                        tableau_html += '<div class="case case_perso '+jeu[currentJ].grille[i][j].bateau.couleur+' '+jeu[currentJ].grille[i][j].bateau.etat[currentJ]+' '+jeu[currentJ].grille[i][j].etat+'" data-x="'+i+'" data-y="'+j+'"></div>';
+                    }else{
+                        tableau_html += '<div class="case case_perso" data-x="'+i+'" data-y="'+j+'"></div>';
+                    }
                 }else{
-                    tableau_html += '<div class="case" data-x="'+i+'" data-y="'+j+'"></div>';
+                    tableau_html += '<div class="case case_adversaire" data-x="'+i+'" data-y="'+j+'"></div>';
                 }
             }
             tableau_html += '</div>';
         }
 
         // Infos du joueur
-        tableau_html += '<div class="ligne infos_user infos_bottom">'+joueurs[currentJ].nom+' - <span class="nb_coups"> Nombre de coups : 0</span></div>';
-        $('#tableau-J'+currentJ).html(tableau_html);
+        if((!forAdversaire && currentJ == 0) || (forAdversaire && currentJ == 1)){
+            tableau_html += '<div class="ligne infos_user infos_bottom"><p>Votre jeu</p><p><span class="nb_coups"> Nombre de coups : 0</span></p></div>';
+        }else{
+            if(currentJ == 0){
+                var adversaire =  1;
+            }else{
+                var adversaire = 0;
+            }
+            tableau_html += '<div class="ligne infos_user infos_bottom"><p>Votre adversaire : '+joueurs[adversaire].infos.name+'</p><p><span class="nb_coups"> Nombre de coups : 0</span></p></div>';
+        }
+        if((!forAdversaire && currentJ == 0) || (forAdversaire && currentJ == 1)){
+            $('#tableau-J1').html(tableau_html);
+        }else{
+            $('#tableau-J0').html(tableau_html);
+        }
 
     }
 }
 
 /////////////////////////////////////////////////////////////////////////////
 
-var Game = function(){
+var Game = function(JEU){
     
     // Joueur en cours
     var currentJ = 0;
 
-    // Vérif saisie et initialisation du jeu
-    if(nb_cases < 10 || nb_cases > 26){
-        alert('Le nombre de case doit être supérieur à 11 et inférieur à 26');
-        $('#tableau-J0').html('Veuillez recharger la page');
-    }else{
-        for(J=0; J<2; J++){
-            initialisationGrille();
-            for(var B=0; B<bateaux.length; B++){
-                bateauHasard(B);
-            }
-            constructionCssGrille();
-            changeUser();
-        }
-        jeuOrdi();
-    }
+    var jeu = JEU.plateau;
+    var nb_cases = JEU.nb_cases;
+    var joueurs = JEU.joueurs;
 
     // Au click sur une case
-    $(document).on('click', '.case', function(){
+    $(document).on('click', '.case_adversaire', function(){
         // Si c'est pas une case du jeu, on ne fait rien
         if($(this).parent().hasClass('desactived') || $(this).parent().hasClass('coordonnees')){
             return false;
@@ -241,12 +246,12 @@ var Game = function(){
             currentJ = 1;
             $('#tableau-J0 .ligne').addClass('desactived');
             $('#tableau-J1 .ligne').removeClass('desactived');
-            $('#consignes').html("Au tour de <strong>" + joueurs[0].nom + "</strong> de jouer !");
+            $('#consignes').html("Au tour de <strong>" + joueurs[0].infos.name + "</strong> de jouer !");
         }else{
             currentJ = 0;
             $('#tableau-J0 .ligne').removeClass('desactived');
             $('#tableau-J1 .ligne').addClass('desactived');
-            $('#consignes').html("Au tour de <strong>" + joueurs[1].nom + "</strong> de jouer !");
+            $('#consignes').html("Au tour de <strong>" + joueurs[1].infos.name + "</strong> de jouer !");
         }
     }
 
@@ -289,11 +294,11 @@ var Game = function(){
         // On reconstruit le tableau en HTML CSS  -- On attends 2 secondes pour l'animation d'explosion si le bateau a coulé
         if(coule){
         setTimeout(function(){
-            constructionCssGrille();
+            InitCssGrilles(JEU);
             checkGagnant(); // On vérifie si un joueur a gagné
         }, 1400);
         }else{
-        constructionCssGrille()
+            InitCssGrilles(JEU)
         checkGagnant(); // On vérifie si un joueur a gagné
         }
         return true;

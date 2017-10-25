@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
     <link rel="stylesheet" href="css/jeu.css">
     <link rel="stylesheet" href="css/login.css">
+    <link rel="stylesheet" href="css/style.css">
     <link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet" type="text/css">
     <link href='http://fonts.googleapis.com/css?family=Raleway:400,200' rel='stylesheet' type='text/css'>
     <title>Jeu Multi</title>
@@ -14,12 +15,34 @@
 <body>
 
     <nav class="navbar-perso">
+        <div><!--icon-->
+            <input type="checkbox" id="toggle" class="icon_hamburger">
+            <label for="toggle" onclick class="icon_hamburger">
+                <ul class="icon_hamburger">
+                    <li class="top icon_hamburger"></li>
+                    <li class="mid icon_hamburger"></li>
+                    <li class="bot icon_hamburger"></li>
+                </ul>
+            </label>
+            <!--nav-->
+            <div class="rounded-rectangle">
+                <div class="rectangle">
+                    <div class="drawer">
+                        <h2>Personnes connectés : </h2>
+                        <div id='nobody'><em>Aucune personne pour le moment...</em></div>
+                        <div id="list_users" class="list-group"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
         <div>Bataille navale <small class="version_game">[v0.0.1 Bêta]</small></div>
         <div>
             <label class="username"></label><br>
             <button type="button" id="leave-chat" data-username="" class="btn btn-warning btn-sm">Déconnexion</button>
         </div>
     </nav>
+
+    
 
     <div id="login_screen" user_id="1">
         <div class="container">
@@ -59,17 +82,17 @@
     <div id="game" class="container">
         <h4 id="consignes"></h4>
         <div class="row">
-            <div id="tableau-J1" class="col-md-6 col-xs-12 tableaux"></div>
             <div id="tableau-J0" class="col-md-6 col-xs-12 tableaux"></div>
+            <div id="tableau-J1" class="col-md-6 col-xs-12 tableaux"></div>
         </div>    
     </div>
 
-    <div id="game_screen" class="container">
+    <!--<div id="game_screen" class="container">
         <h2>Personnes connectés : </h2>
         <div id='nobody'><em>Aucune personne pour le moment...</em></div>
         <div id="list_users" class="list-group">
         </div>
-    </div>
+    </div>-->
 
     <div class="modal fade bd-example-modal-sm" id="newDefi">
         <div class="modal-dialog modal-sm" role="document">
