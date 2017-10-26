@@ -22,6 +22,7 @@ label.icon_hamburger {
     height: 24px;
     top: 20px;
     position: fixed;
+    margin-bottom: 1px;
 }
 
 input.icon_hamburger[type=checkbox]{
@@ -52,6 +53,7 @@ input.icon_hamburger[type=checkbox]:checked ~ label.icon_hamburger ul.icon_hambu
     top: 59px;
     left: -22%;
     padding: 15px;
+    z-index: 100;
 }
 
 input.icon_hamburger[type=checkbox]:checked ~ .rounded-rectangle .rectangle .drawer {
